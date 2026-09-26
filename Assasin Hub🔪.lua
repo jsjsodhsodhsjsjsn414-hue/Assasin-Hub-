@@ -1,733 +1,712 @@
--- Assasin Hub - MM2 (Interface Própria)
--- Key: Murder
+--[[ Assasin Hub - Obfuscated Build ]]
+local _0x0 = string.char
+local _0x1 = string.gsub
+local _0x2 = tonumber
 
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local CoreGui = game:GetService("CoreGui")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local Camera = workspace.CurrentCamera
+local function _0xD(_s)
+    return (_0x1(_s, "\\(%d+)", function(_n) return _0x0(_0x2(_n)) end))
+end
 
--- ============================================================
--- CONFIGURAÇÕES
--- ============================================================
-local KEY_CORRECT = "Murder"
-local DISCORD_LINK = "https://discord.gg/yaASgMJyD"
-local HUB_NAME = "Assasin Hub"
+local _0x3 = game:GetService(_0xD("\80\108\97\121\101\114\115"))
+local _0x4 = _0x3.LocalPlayer
+local _0x5 = game:GetService(_0xD("\67\111\114\101\71\117\105"))
+local _0x6 = game:GetService(_0xD("\82\117\110\83\101\114\118\105\99\101"))
+local _0x7 = game:GetService(_0xD("\85\115\101\114\73\110\112\117\116\83\101\114\118\105\99\101"))
+local _0x8 = game:GetService(_0xD("\84\119\101\101\110\83\101\114\118\105\99\101"))
+local _0x9 = workspace.CurrentCamera
 
--- ⚠️ COLOQUE AQUI O ID DA IMAGEM (não do decal, se souber)
--- Se não souber, deixe o do decal que o script tenta os 2
-local DECAL_ID = 97195023203528
-local IMAGE_ID = 97195023203528 -- <-- troque aqui se o decal não funcionar
+local _0xA = _0xD("\77\117\114\100\101\114")
+local _0xB = _0xD("\104\116\116\112\115\58\47\47\100\105\115\99\111\114\100\46\103\103\47\121\97\65\83\103\77\74\121\68")
+local _0xC = _0xD("\65\115\115\97\115\105\110\32\72\117\98")
+local _0xE = 97195023203528
+local _0xF = 97195023203528
+local _0x10 = _0xD("\114\98\120\97\115\115\101\116\105\100\58\47\47\49\51\52\56\48\57\56\56\56\48\56")
 
-local DISCORD_ICON = "rbxassetid://13480988808"
-
--- ============================================================
--- FUNÇÃO: CRIAR IMAGEM COM MÚLTIPLAS TENTATIVAS
--- ============================================================
-local function createLogo(parent, size, position, fallbackText)
-    local container = Instance.new("Frame")
-    container.Size = size
-    container.Position = position
-    container.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    container.BorderSizePixel = 0
-    container.Parent = parent
-
-    local cCorner = Instance.new("UICorner")
-    cCorner.CornerRadius = UDim.new(1, 0)
-    cCorner.Parent = container
-
-    local img = Instance.new("ImageLabel")
-    img.Size = UDim2.new(1, 0, 1, 0)
-    img.BackgroundTransparency = 1
-    img.Image = "rbxassetid://" .. DECAL_ID
-    img.Parent = container
-
-    local fallback = Instance.new("TextLabel")
-    fallback.Size = UDim2.new(1, 0, 1, 0)
-    fallback.BackgroundTransparency = 1
-    fallback.Text = fallbackText or "A"
-    fallback.TextColor3 = Color3.fromRGB(255, 60, 60)
-    fallback.TextSize = 18
-    fallback.Font = Enum.Font.GothamBold
-    fallback.Visible = false
-    fallback.Parent = container
-
-    -- Tentar carregar - testa decal primeiro, depois image
+local function _0x11(_p, _s, _pos, _fb)
+    local _c = Instance.new(_0xD("\70\114\97\109\101"))
+    _c.Size = _s
+    _c.Position = _pos
+    _c.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    _c.BorderSizePixel = 0
+    _c.Parent = _p
+    local _cc = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+    _cc.CornerRadius = UDim.new(1, 0)
+    _cc.Parent = _c
+    local _i = Instance.new(_0xD("\73\109\97\103\101\76\97\98\101\108"))
+    _i.Size = UDim2.new(1, 0, 1, 0)
+    _i.BackgroundTransparency = 1
+    _i.Image = _0xD("\114\98\120\97\115\115\101\116\105\100\58\47\47") .. _0xE
+    _i.Parent = _c
+    local _f = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+    _f.Size = UDim2.new(1, 0, 1, 0)
+    _f.BackgroundTransparency = 1
+    _f.Text = _fb or "A"
+    _f.TextColor3 = Color3.fromRGB(255, 60, 60)
+    _f.TextSize = 18
+    _f.Font = Enum.Font.GothamBold
+    _f.Visible = false
+    _f.Parent = _c
     task.spawn(function()
         task.wait(1.5)
-        if not img.IsLoaded then
-            -- Tentar o ID alternativo (Image)
-            img.Image = "rbxassetid://" .. IMAGE_ID
+        if not _i.IsLoaded then
+            _i.Image = _0xD("\114\98\120\97\115\115\101\116\105\100\58\47\47") .. _0xF
             task.wait(1.5)
-            if not img.IsLoaded then
-                -- Falhou tudo: mostra fallback
-                img.Image = ""
-                fallback.Visible = true
+            if not _i.IsLoaded then
+                _i.Image = ""
+                _f.Visible = true
             end
         end
     end)
-
-    return container, img, fallback
+    return _c, _i, _f
 end
 
--- ============================================================
 -- INTRO
--- ============================================================
-local introGui = Instance.new("ScreenGui")
-introGui.Name = "AssasinIntro"
-introGui.ResetOnSpawn = false
-introGui.IgnoreGuiInset = true
-introGui.Parent = CoreGui
+local _0x12 = Instance.new(_0xD("\83\99\114\101\101\110\71\117\105"))
+_0x12.Name = _0xD("\65\115\115\97\115\105\110\73\110\116\114\111")
+_0x12.ResetOnSpawn = false
+_0x12.IgnoreGuiInset = true
+_0x12.Parent = _0x5
 
-local introText = Instance.new("TextLabel")
-introText.Size = UDim2.new(1, 0, 0, 80)
-introText.Position = UDim2.new(0, 0, 0.5, -40)
-introText.BackgroundTransparency = 1
-introText.Text = "Assasin Hub🔪"
-introText.TextColor3 = Color3.fromRGB(255, 255, 255)
-introText.TextSize = 48
-introText.Font = Enum.Font.GothamBold
-introText.TextStrokeTransparency = 0
-introText.TextStrokeColor3 = Color3.fromRGB(120, 0, 0)
-introText.TextTransparency = 1
-introText.Parent = introGui
+local _0x13 = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+_0x13.Size = UDim2.new(1, 0, 0, 80)
+_0x13.Position = UDim2.new(0, 0, 0.5, -40)
+_0x13.BackgroundTransparency = 1
+_0x13.Text = _0xD("\65\115\115\97\115\105\110\32\72\117\98\240\159\148\170")
+_0x13.TextColor3 = Color3.fromRGB(255, 255, 255)
+_0x13.TextSize = 48
+_0x13.Font = Enum.Font.GothamBold
+_0x13.TextStrokeTransparency = 0
+_0x13.TextStrokeColor3 = Color3.fromRGB(120, 0, 0)
+_0x13.TextTransparency = 1
+_0x13.Parent = _0x12
 
-introText.TextTransparency = 0
-introText.TextStrokeTransparency = 0
-introText.Size = UDim2.new(1, 0, 0, 40)
-TweenService:Create(introText, TweenInfo.new(0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+_0x13.TextTransparency = 0
+_0x13.TextStrokeTransparency = 0
+_0x13.Size = UDim2.new(1, 0, 0, 40)
+_0x8:Create(_0x13, TweenInfo.new(0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
     Size = UDim2.new(1, 0, 0, 80),
     TextSize = 48
 }):Play()
 
 task.wait(2.5)
-TweenService:Create(introText, TweenInfo.new(0.6), {TextTransparency = 1, TextStrokeTransparency = 1}):Play()
+_0x8:Create(_0x13, TweenInfo.new(0.6), {TextTransparency = 1, TextStrokeTransparency = 1}):Play()
 task.wait(0.8)
-introGui:Destroy()
+_0x12:Destroy()
 
--- ============================================================
--- NOTIFICAÇÃO ROBLOX
--- ============================================================
-local notifGui = Instance.new("ScreenGui")
-notifGui.Name = "AssasinNotifRoblox"
-notifGui.ResetOnSpawn = false
-notifGui.IgnoreGuiInset = true
-notifGui.Parent = CoreGui
+-- NOTIFICAÇÃO INICIAL
+local _0x14 = Instance.new(_0xD("\83\99\114\101\101\110\71\117\105"))
+_0x14.Name = _0xD("\65\115\115\97\115\105\110\78\111\116\105\102")
+_0x14.ResetOnSpawn = false
+_0x14.IgnoreGuiInset = true
+_0x14.Parent = _0x5
 
-local notifFrame = Instance.new("Frame")
-notifFrame.Size = UDim2.new(0, 300, 0, 70)
-notifFrame.Position = UDim2.new(0, -320, 0, 50)
-notifFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-notifFrame.BorderSizePixel = 0
-notifFrame.Parent = notifGui
+local _0x15 = Instance.new(_0xD("\70\114\97\109\101"))
+_0x15.Size = UDim2.new(0, 300, 0, 70)
+_0x15.Position = UDim2.new(0, -320, 0, 50)
+_0x15.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+_0x15.BorderSizePixel = 0
+_0x15.Parent = _0x14
 
-local nfCorner = Instance.new("UICorner")
-nfCorner.CornerRadius = UDim.new(0, 10)
-nfCorner.Parent = notifFrame
+local _0x16 = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+_0x16.CornerRadius = UDim.new(0, 10)
+_0x16.Parent = _0x15
 
-local nfStroke = Instance.new("UIStroke")
-nfStroke.Color = Color3.fromRGB(180, 30, 30)
-nfStroke.Thickness = 1.5
-nfStroke.Parent = notifFrame
+local _0x17 = Instance.new(_0xD("\85\73\83\116\114\111\107\101"))
+_0x17.Color = Color3.fromRGB(180, 30, 30)
+_0x17.Thickness = 1.5
+_0x17.Parent = _0x15
 
-createLogo(notifFrame, UDim2.new(0, 50, 0, 50), UDim2.new(0, 10, 0.5, -25), "A")
+_0x11(_0x15, UDim2.new(0, 50, 0, 50), UDim2.new(0, 10, 0.5, -25), "A")
 
-local nfTitle = Instance.new("TextLabel")
-nfTitle.Size = UDim2.new(1, -75, 0, 22)
-nfTitle.Position = UDim2.new(0, 68, 0, 12)
-nfTitle.BackgroundTransparency = 1
-nfTitle.Text = HUB_NAME
-nfTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-nfTitle.TextSize = 15
-nfTitle.Font = Enum.Font.GothamBold
-nfTitle.TextXAlignment = Enum.TextXAlignment.Left
-nfTitle.Parent = notifFrame
+local _0x18 = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+_0x18.Size = UDim2.new(1, -75, 0, 22)
+_0x18.Position = UDim2.new(0, 68, 0, 12)
+_0x18.BackgroundTransparency = 1
+_0x18.Text = _0xC
+_0x18.TextColor3 = Color3.fromRGB(255, 255, 255)
+_0x18.TextSize = 15
+_0x18.Font = Enum.Font.GothamBold
+_0x18.TextXAlignment = Enum.TextXAlignment.Left
+_0x18.Parent = _0x15
 
-local nfMsg = Instance.new("TextLabel")
-nfMsg.Size = UDim2.new(1, -75, 0, 20)
-nfMsg.Position = UDim2.new(0, 68, 0, 36)
-nfMsg.BackgroundTransparency = 1
-nfMsg.Text = "Assasin Hub Executado Com Sucesso"
-nfMsg.TextColor3 = Color3.fromRGB(200, 200, 200)
-nfMsg.TextSize = 12
-nfMsg.Font = Enum.Font.Gotham
-nfMsg.TextXAlignment = Enum.TextXAlignment.Left
-nfMsg.Parent = notifFrame
+local _0x19 = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+_0x19.Size = UDim2.new(1, -75, 0, 20)
+_0x19.Position = UDim2.new(0, 68, 0, 36)
+_0x19.BackgroundTransparency = 1
+_0x19.Text = _0xD("\65\115\115\97\115\105\110\32\72\117\98\32\69\120\101\99\117\116\97\100\111\32\67\111\109\32\83\117\99\101\115\115\111")
+_0x19.TextColor3 = Color3.fromRGB(200, 200, 200)
+_0x19.TextSize = 12
+_0x19.Font = Enum.Font.Gotham
+_0x19.TextXAlignment = Enum.TextXAlignment.Left
+_0x19.Parent = _0x15
 
-TweenService:Create(notifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Position = UDim2.new(0, 20, 0, 50)}):Play()
+_0x8:Create(_0x15, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Position = UDim2.new(0, 20, 0, 50)}):Play()
 task.wait(4)
-TweenService:Create(notifFrame, TweenInfo.new(0.5), {Position = UDim2.new(0, -320, 0, 50)}):Play()
+_0x8:Create(_0x15, TweenInfo.new(0.5), {Position = UDim2.new(0, -320, 0, 50)}):Play()
 task.wait(0.6)
-notifGui:Destroy()
+_0x14:Destroy()
 
--- ============================================================
 -- KEY SYSTEM
--- ============================================================
-local keyVerified = false
+local _0x1A = false
 
-local keyGui = Instance.new("ScreenGui")
-keyGui.Name = "AssasinKey"
-keyGui.ResetOnSpawn = false
-keyGui.Parent = CoreGui
+local _0x1B = Instance.new(_0xD("\83\99\114\101\101\110\71\117\105"))
+_0x1B.Name = _0xD("\65\115\115\97\115\105\110\75\101\121")
+_0x1B.ResetOnSpawn = false
+_0x1B.Parent = _0x5
 
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 280, 0, 170)
-mainFrame.Position = UDim2.new(0.5, -140, 0.5, -85)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
-mainFrame.BorderSizePixel = 0
-mainFrame.Active = true
-mainFrame.Draggable = true
-mainFrame.Parent = keyGui
+local _0x1C = Instance.new(_0xD("\70\114\97\109\101"))
+_0x1C.Size = UDim2.new(0, 280, 0, 170)
+_0x1C.Position = UDim2.new(0.5, -140, 0.5, -85)
+_0x1C.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+_0x1C.BorderSizePixel = 0
+_0x1C.Active = true
+_0x1C.Draggable = true
+_0x1C.Parent = _0x1B
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = mainFrame
+local _0x1D = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+_0x1D.CornerRadius = UDim.new(0, 12)
+_0x1D.Parent = _0x1C
 
-local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(180, 30, 30)
-stroke.Thickness = 1.5
-stroke.Parent = mainFrame
+local _0x1E = Instance.new(_0xD("\85\73\83\116\114\111\107\101"))
+_0x1E.Color = Color3.fromRGB(180, 30, 30)
+_0x1E.Thickness = 1.5
+_0x1E.Parent = _0x1C
 
-createLogo(mainFrame, UDim2.new(0, 44, 0, 44), UDim2.new(0.5, -22, 0, 6), "A")
+_0x11(_0x1C, UDim2.new(0, 44, 0, 44), UDim2.new(0.5, -22, 0, 6), "A")
 
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 26)
-title.Position = UDim2.new(0, 0, 0, 52)
-title.BackgroundTransparency = 1
-title.Text = HUB_NAME
-title.TextColor3 = Color3.fromRGB(255, 60, 60)
-title.TextSize = 18
-title.Font = Enum.Font.GothamBold
-title.Parent = mainFrame
+local _0x1F = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+_0x1F.Size = UDim2.new(1, 0, 0, 26)
+_0x1F.Position = UDim2.new(0, 0, 0, 52)
+_0x1F.BackgroundTransparency = 1
+_0x1F.Text = _0xC
+_0x1F.TextColor3 = Color3.fromRGB(255, 60, 60)
+_0x1F.TextSize = 18
+_0x1F.Font = Enum.Font.GothamBold
+_0x1F.Parent = _0x1C
 
-local subtitle = Instance.new("TextLabel")
-subtitle.Size = UDim2.new(1, 0, 0, 18)
-subtitle.Position = UDim2.new(0, 0, 0, 76)
-subtitle.BackgroundTransparency = 1
-subtitle.Text = "Insira a Key para continuar"
-subtitle.TextColor3 = Color3.fromRGB(150, 150, 150)
-subtitle.TextSize = 11
-subtitle.Font = Enum.Font.Gotham
-subtitle.Parent = mainFrame
+local _0x20 = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+_0x20.Size = UDim2.new(1, 0, 0, 18)
+_0x20.Position = UDim2.new(0, 0, 0, 76)
+_0x20.BackgroundTransparency = 1
+_0x20.Text = _0xD("\73\110\115\105\114\97\32\97\32\75\101\121\32\112\97\114\97\32\99\111\110\116\105\110\117\97\114")
+_0x20.TextColor3 = Color3.fromRGB(150, 150, 150)
+_0x20.TextSize = 11
+_0x20.Font = Enum.Font.Gotham
+_0x20.Parent = _0x1C
 
-local keyBox = Instance.new("TextBox")
-keyBox.Size = UDim2.new(0, 220, 0, 36)
-keyBox.Position = UDim2.new(0.5, -110, 0, 98)
-keyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
-keyBox.BorderSizePixel = 0
-keyBox.Text = ""
-keyBox.PlaceholderText = "Digite: Murder"
-keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyBox.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
-keyBox.TextSize = 14
-keyBox.Font = Enum.Font.Gotham
-keyBox.ClearTextOnFocus = false
-keyBox.Parent = mainFrame
+local _0x21 = Instance.new(_0xD("\84\101\120\116\66\111\120"))
+_0x21.Size = UDim2.new(0, 220, 0, 36)
+_0x21.Position = UDim2.new(0.5, -110, 0, 98)
+_0x21.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
+_0x21.BorderSizePixel = 0
+_0x21.Text = ""
+_0x21.PlaceholderText = _0xD("\68\105\103\105\116\101\58\32\77\117\114\100\101\114")
+_0x21.TextColor3 = Color3.fromRGB(255, 255, 255)
+_0x21.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
+_0x21.TextSize = 14
+_0x21.Font = Enum.Font.Gotham
+_0x21.ClearTextOnFocus = false
+_0x21.Parent = _0x1C
 
-local boxCorner = Instance.new("UICorner")
-boxCorner.CornerRadius = UDim.new(0, 8)
-boxCorner.Parent = keyBox
+local _0x22 = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+_0x22.CornerRadius = UDim.new(0, 8)
+_0x22.Parent = _0x21
 
-local verifyBtn = Instance.new("TextButton")
-verifyBtn.Size = UDim2.new(0, 120, 0, 30)
-verifyBtn.Position = UDim2.new(0.5, -60, 0, 140)
-verifyBtn.BackgroundColor3 = Color3.fromRGB(150, 25, 25)
-verifyBtn.BorderSizePixel = 0
-verifyBtn.Text = "Verificar"
-verifyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-verifyBtn.TextSize = 13
-verifyBtn.Font = Enum.Font.GothamBold
-verifyBtn.Parent = mainFrame
+local _0x23 = Instance.new(_0xD("\84\101\120\116\66\117\116\116\111\110"))
+_0x23.Size = UDim2.new(0, 120, 0, 30)
+_0x23.Position = UDim2.new(0.5, -60, 0, 140)
+_0x23.BackgroundColor3 = Color3.fromRGB(150, 25, 25)
+_0x23.BorderSizePixel = 0
+_0x23.Text = _0xD("\86\101\114\105\102\105\99\97\114")
+_0x23.TextColor3 = Color3.fromRGB(255, 255, 255)
+_0x23.TextSize = 13
+_0x23.Font = Enum.Font.GothamBold
+_0x23.Parent = _0x1C
 
-local btnCorner = Instance.new("UICorner")
-btnCorner.CornerRadius = UDim.new(0, 8)
-btnCorner.Parent = verifyBtn
+local _0x24 = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+_0x24.CornerRadius = UDim.new(0, 8)
+_0x24.Parent = _0x23
 
-local function verifyKey()
-    if keyBox.Text == KEY_CORRECT then
-        keyVerified = true
-        keyGui:Destroy()
-        local notif = Instance.new("ScreenGui")
-        notif.Name = "AssasinWelcome"
-        notif.ResetOnSpawn = false
-        notif.Parent = CoreGui
-        local nFrame = Instance.new("Frame")
-        nFrame.Size = UDim2.new(0, 260, 0, 60)
-        nFrame.Position = UDim2.new(0.5, -130, 0, 20)
-        nFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-        nFrame.BorderSizePixel = 0
-        nFrame.Parent = notif
-        local nCorner = Instance.new("UICorner") nCorner.CornerRadius = UDim.new(0, 10) nCorner.Parent = nFrame
-        local nStroke = Instance.new("UIStroke") nStroke.Color = Color3.fromRGB(180, 30, 30) nStroke.Parent = nFrame
-        local nTitle = Instance.new("TextLabel")
-        nTitle.Size = UDim2.new(1, -20, 0, 24) nTitle.Position = UDim2.new(0, 10, 0, 6)
-        nTitle.BackgroundTransparency = 1 nTitle.Text = HUB_NAME
-        nTitle.TextColor3 = Color3.fromRGB(255, 60, 60) nTitle.TextSize = 14
-        nTitle.Font = Enum.Font.GothamBold nTitle.TextXAlignment = Enum.TextXAlignment.Left
-        nTitle.Parent = nFrame
-        local nMsg = Instance.new("TextLabel")
-        nMsg.Size = UDim2.new(1, -20, 0, 20) nMsg.Position = UDim2.new(0, 10, 0, 30)
-        nMsg.BackgroundTransparency = 1 nMsg.Text = "Seja bem vindo dono"
-        nMsg.TextColor3 = Color3.fromRGB(220, 220, 220) nMsg.TextSize = 12
-        nMsg.Font = Enum.Font.Gotham nMsg.TextXAlignment = Enum.TextXAlignment.Left
-        nMsg.Parent = nFrame
+local function _0x25()
+    if _0x21.Text == _0xA then
+        _0x1A = true
+        _0x1B:Destroy()
+        local _n = Instance.new(_0xD("\83\99\114\101\101\110\71\117\105"))
+        _n.Name = _0xD("\65\115\115\97\115\105\110\87\101\108\99\111\109\101")
+        _n.ResetOnSpawn = false
+        _n.Parent = _0x5
+        local _f = Instance.new(_0xD("\70\114\97\109\101"))
+        _f.Size = UDim2.new(0, 260, 0, 60)
+        _f.Position = UDim2.new(0.5, -130, 0, 20)
+        _f.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+        _f.BorderSizePixel = 0
+        _f.Parent = _n
+        local _c = Instance.new(_0xD("\85\73\67\111\114\110\101\114")) _c.CornerRadius = UDim.new(0, 10) _c.Parent = _f
+        local _s = Instance.new(_0xD("\85\73\83\116\114\111\107\101")) _s.Color = Color3.fromRGB(180, 30, 30) _s.Parent = _f
+        local _t = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+        _t.Size = UDim2.new(1, -20, 0, 24) _t.Position = UDim2.new(0, 10, 0, 6)
+        _t.BackgroundTransparency = 1 _t.Text = _0xC
+        _t.TextColor3 = Color3.fromRGB(255, 60, 60) _t.TextSize = 14
+        _t.Font = Enum.Font.GothamBold _t.TextXAlignment = Enum.TextXAlignment.Left
+        _t.Parent = _f
+        local _m = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+        _m.Size = UDim2.new(1, -20, 0, 20) _m.Position = UDim2.new(0, 10, 0, 30)
+        _m.BackgroundTransparency = 1 _m.Text = _0xD("\83\101\106\97\32\98\101\109\32\118\105\110\100\111\32\100\111\110\111")
+        _m.TextColor3 = Color3.fromRGB(220, 220, 220) _m.TextSize = 12
+        _m.Font = Enum.Font.Gotham _m.TextXAlignment = Enum.TextXAlignment.Left
+        _m.Parent = _f
         task.wait(4)
-        notif:Destroy()
+        _n:Destroy()
     else
-        keyBox.Text = ""
-        keyBox.PlaceholderText = "Key incorreta!"
+        _0x21.Text = ""
+        _0x21.PlaceholderText = _0xD("\75\101\121\32\105\110\99\111\114\114\101\116\97\33")
         task.wait(2)
-        keyBox.PlaceholderText = "Digite: Murder"
+        _0x21.PlaceholderText = _0xD("\68\105\103\105\116\101\58\32\77\117\114\100\101\114")
     end
 end
 
-verifyBtn.MouseButton1Click:Connect(verifyKey)
-keyBox.FocusLost:Connect(function(enterPressed) if enterPressed then verifyKey() end end)
+_0x23.MouseButton1Click:Connect(_0x25)
+_0x21.FocusLost:Connect(function(_e) if _e then _0x25() end end)
 
-local timeout = 0
-while not keyVerified and timeout < 60 do task.wait(0.5) timeout = timeout + 1 end
-if not keyVerified then return end
+local _0x26 = 0
+while not _0x1A and _0x26 < 60 do task.wait(0.5) _0x26 = _0x26 + 1 end
+if not _0x1A then return end
 
--- ============================================================
 -- INTERFACE PRINCIPAL
--- ============================================================
-local hubGui = Instance.new("ScreenGui")
-hubGui.Name = "AssasinHub"
-hubGui.ResetOnSpawn = false
-hubGui.Parent = CoreGui
+local _0x27 = Instance.new(_0xD("\83\99\114\101\101\110\71\117\105"))
+_0x27.Name = _0xD("\65\115\115\97\115\105\110\72\117\98")
+_0x27.ResetOnSpawn = false
+_0x27.Parent = _0x5
 
-local hubFrame = Instance.new("Frame")
-hubFrame.Size = UDim2.new(0, 320, 0, 400)
-hubFrame.Position = UDim2.new(0.5, -160, 0.5, -200)
-hubFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 18)
-hubFrame.BorderSizePixel = 0
-hubFrame.Active = true
-hubFrame.Draggable = true
-hubFrame.Visible = true
-hubFrame.Parent = hubGui
+local _0x28 = Instance.new(_0xD("\70\114\97\109\101"))
+_0x28.Size = UDim2.new(0, 320, 0, 400)
+_0x28.Position = UDim2.new(0.5, -160, 0.5, -200)
+_0x28.BackgroundColor3 = Color3.fromRGB(15, 15, 18)
+_0x28.BorderSizePixel = 0
+_0x28.Active = true
+_0x28.Draggable = true
+_0x28.Visible = true
+_0x28.Parent = _0x27
 
-local hubCorner = Instance.new("UICorner")
-hubCorner.CornerRadius = UDim.new(0, 14)
-hubCorner.Parent = hubFrame
+local _0x29 = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+_0x29.CornerRadius = UDim.new(0, 14)
+_0x29.Parent = _0x28
 
-local hubStroke = Instance.new("UIStroke")
-hubStroke.Color = Color3.fromRGB(70, 70, 80)
-hubStroke.Thickness = 1
-hubStroke.Parent = hubFrame
+local _0x2A = Instance.new(_0xD("\85\73\83\116\114\111\107\101"))
+_0x2A.Color = Color3.fromRGB(70, 70, 80)
+_0x2A.Thickness = 1
+_0x2A.Parent = _0x28
 
-local header = Instance.new("Frame")
-header.Size = UDim2.new(1, 0, 0, 60)
-header.BackgroundColor3 = Color3.fromRGB(22, 22, 26)
-header.BorderSizePixel = 0
-header.Parent = hubFrame
+local _0x2B = Instance.new(_0xD("\70\114\97\109\101"))
+_0x2B.Size = UDim2.new(1, 0, 0, 60)
+_0x2B.BackgroundColor3 = Color3.fromRGB(22, 22, 26)
+_0x2B.BorderSizePixel = 0
+_0x2B.Parent = _0x28
 
-local headerCorner = Instance.new("UICorner")
-headerCorner.CornerRadius = UDim.new(0, 14)
-headerCorner.Parent = header
+local _0x2C = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+_0x2C.CornerRadius = UDim.new(0, 14)
+_0x2C.Parent = _0x2B
 
-createLogo(header, UDim2.new(0, 36, 0, 36), UDim2.new(0, 12, 0.5, -18), "A")
+_0x11(_0x2B, UDim2.new(0, 36, 0, 36), UDim2.new(0, 12, 0.5, -18), "A")
 
-local hubName = Instance.new("TextLabel")
-hubName.Size = UDim2.new(0, 180, 0, 22)
-hubName.Position = UDim2.new(0, 58, 0, 12)
-hubName.BackgroundTransparency = 1
-hubName.Text = "ASSASIN HUB"
-hubName.TextColor3 = Color3.fromRGB(255, 255, 255)
-hubName.TextSize = 16
-hubName.Font = Enum.Font.GothamBold
-hubName.TextXAlignment = Enum.TextXAlignment.Left
-hubName.Parent = header
+local _0x2D = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+_0x2D.Size = UDim2.new(0, 180, 0, 22)
+_0x2D.Position = UDim2.new(0, 58, 0, 12)
+_0x2D.BackgroundTransparency = 1
+_0x2D.Text = _0xD("\65\83\83\65\83\73\78\32\72\85\66")
+_0x2D.TextColor3 = Color3.fromRGB(255, 255, 255)
+_0x2D.TextSize = 16
+_0x2D.Font = Enum.Font.GothamBold
+_0x2D.TextXAlignment = Enum.TextXAlignment.Left
+_0x2D.Parent = _0x2B
 
-local hubSub = Instance.new("TextLabel")
-hubSub.Size = UDim2.new(0, 180, 0, 16)
-hubSub.Position = UDim2.new(0, 58, 0, 32)
-hubSub.BackgroundTransparency = 1
-hubSub.Text = "MM2 • Assasin Edition"
-hubSub.TextColor3 = Color3.fromRGB(150, 150, 160)
-hubSub.TextSize = 10
-hubSub.Font = Enum.Font.Gotham
-hubSub.TextXAlignment = Enum.TextXAlignment.Left
-hubSub.Parent = header
+local _0x2E = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+_0x2E.Size = UDim2.new(0, 180, 0, 16)
+_0x2E.Position = UDim2.new(0, 58, 0, 32)
+_0x2E.BackgroundTransparency = 1
+_0x2E.Text = _0xD("\77\77\50\32\226\128\162\32\65\115\115\97\115\105\110\32\69\100\105\116\105\111\110")
+_0x2E.TextColor3 = Color3.fromRGB(150, 150, 160)
+_0x2E.TextSize = 10
+_0x2E.Font = Enum.Font.Gotham
+_0x2E.TextXAlignment = Enum.TextXAlignment.Left
+_0x2E.Parent = _0x2B
 
--- Discord com ícone
-local discordBtn = Instance.new("TextButton")
-discordBtn.Size = UDim2.new(0, 32, 0, 32)
-discordBtn.Position = UDim2.new(1, -80, 0.5, -16)
-discordBtn.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
-discordBtn.BorderSizePixel = 0
-discordBtn.Text = ""
-discordBtn.AutoButtonColor = false
-discordBtn.Parent = header
+local _0x2F = Instance.new(_0xD("\84\101\120\116\66\117\116\116\111\110"))
+_0x2F.Size = UDim2.new(0, 32, 0, 32)
+_0x2F.Position = UDim2.new(1, -80, 0.5, -16)
+_0x2F.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+_0x2F.BorderSizePixel = 0
+_0x2F.Text = ""
+_0x2F.AutoButtonColor = false
+_0x2F.Parent = _0x2B
 
-local discordCorner = Instance.new("UICorner")
-discordCorner.CornerRadius = UDim.new(0, 8)
-discordCorner.Parent = discordBtn
+local _0x30 = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+_0x30.CornerRadius = UDim.new(0, 8)
+_0x30.Parent = _0x2F
 
-local discordIcon = Instance.new("ImageLabel")
-discordIcon.Size = UDim2.new(0, 20, 0, 20)
-discordIcon.Position = UDim2.new(0.5, -10, 0.5, -10)
-discordIcon.BackgroundTransparency = 1
-discordIcon.Image = DISCORD_ICON
-discordIcon.Parent = discordBtn
+local _0x31 = Instance.new(_0xD("\73\109\97\103\101\76\97\98\101\108"))
+_0x31.Size = UDim2.new(0, 20, 0, 20)
+_0x31.Position = UDim2.new(0.5, -10, 0.5, -10)
+_0x31.BackgroundTransparency = 1
+_0x31.Image = _0x10
+_0x31.Parent = _0x2F
 
-discordBtn.MouseButton1Click:Connect(function()
-    if setclipboard then setclipboard(DISCORD_LINK) end
-    local notif = Instance.new("ScreenGui")
-    notif.Name = "AssasinNotifD"
-    notif.ResetOnSpawn = false
-    notif.Parent = CoreGui
-    local nFrame = Instance.new("Frame")
-    nFrame.Size = UDim2.new(0, 260, 0, 50)
-    nFrame.Position = UDim2.new(0.5, -130, 0, 20)
-    nFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-    nFrame.BorderSizePixel = 0
-    nFrame.Parent = notif
-    local nC = Instance.new("UICorner") nC.CornerRadius = UDim.new(0, 10) nC.Parent = nFrame
-    local nT = Instance.new("TextLabel")
-    nT.Size = UDim2.new(1, -20, 1, 0) nT.Position = UDim2.new(0, 10, 0, 0)
-    nT.BackgroundTransparency = 1
-    nT.Text = "Link do Discord copiado!"
-    nT.TextColor3 = Color3.fromRGB(220, 220, 220)
-    nT.TextSize = 12 nT.Font = Enum.Font.Gotham
-    nT.Parent = nFrame
+_0x2F.MouseButton1Click:Connect(function()
+    if setclipboard then setclipboard(_0xB) end
+    local _n = Instance.new(_0xD("\83\99\114\101\101\110\71\117\105"))
+    _n.Name = _0xD("\65\115\115\97\115\105\110\78\111\116\105\102\68")
+    _n.ResetOnSpawn = false
+    _n.Parent = _0x5
+    local _f = Instance.new(_0xD("\70\114\97\109\101"))
+    _f.Size = UDim2.new(0, 260, 0, 50)
+    _f.Position = UDim2.new(0.5, -130, 0, 20)
+    _f.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    _f.BorderSizePixel = 0
+    _f.Parent = _n
+    local _c = Instance.new(_0xD("\85\73\67\111\114\110\101\114")) _c.CornerRadius = UDim.new(0, 10) _c.Parent = _f
+    local _t = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+    _t.Size = UDim2.new(1, -20, 1, 0) _t.Position = UDim2.new(0, 10, 0, 0)
+    _t.BackgroundTransparency = 1
+    _t.Text = _0xD("\76\105\110\107\32\100\111\32\68\105\115\99\111\114\100\32\99\111\112\105\97\100\111\33")
+    _t.TextColor3 = Color3.fromRGB(220, 220, 220)
+    _t.TextSize = 12 _t.Font = Enum.Font.Gotham
+    _t.Parent = _f
     task.wait(2)
-    notif:Destroy()
+    _n:Destroy()
 end)
 
-local closeBtn = Instance.new("TextButton")
-closeBtn.Size = UDim2.new(0, 30, 0, 30)
-closeBtn.Position = UDim2.new(1, -40, 0.5, -15)
-closeBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
-closeBtn.BorderSizePixel = 0
-closeBtn.Text = "×"
-closeBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
-closeBtn.TextSize = 20
-closeBtn.Font = Enum.Font.GothamBold
-closeBtn.Parent = header
+local _0x32 = Instance.new(_0xD("\84\101\120\116\66\117\116\116\111\110"))
+_0x32.Size = UDim2.new(0, 30, 0, 30)
+_0x32.Position = UDim2.new(1, -40, 0.5, -15)
+_0x32.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+_0x32.BorderSizePixel = 0
+_0x32.Text = _0xD("\195\151")
+_0x32.TextColor3 = Color3.fromRGB(200, 200, 200)
+_0x32.TextSize = 20
+_0x32.Font = Enum.Font.GothamBold
+_0x32.Parent = _0x2B
 
-local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 8)
-closeCorner.Parent = closeBtn
+local _0x33 = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+_0x33.CornerRadius = UDim.new(0, 8)
+_0x33.Parent = _0x32
 
-local scroll = Instance.new("ScrollingFrame")
-scroll.Size = UDim2.new(1, -20, 1, -75)
-scroll.Position = UDim2.new(0, 10, 0, 67)
-scroll.BackgroundTransparency = 1
-scroll.BorderSizePixel = 0
-scroll.ScrollBarThickness = 3
-scroll.ScrollBarImageColor3 = Color3.fromRGB(180, 30, 30)
-scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
-scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-scroll.Parent = hubFrame
+local _0x34 = Instance.new(_0xD("\83\99\114\111\108\108\105\110\103\70\114\97\109\101"))
+_0x34.Size = UDim2.new(1, -20, 1, -75)
+_0x34.Position = UDim2.new(0, 10, 0, 67)
+_0x34.BackgroundTransparency = 1
+_0x34.BorderSizePixel = 0
+_0x34.ScrollBarThickness = 3
+_0x34.ScrollBarImageColor3 = Color3.fromRGB(180, 30, 30)
+_0x34.CanvasSize = UDim2.new(0, 0, 0, 0)
+_0x34.AutomaticCanvasSize = Enum.AutomaticSize.Y
+_0x34.Parent = _0x28
 
-local scrollLayout = Instance.new("UIListLayout")
-scrollLayout.Padding = UDim.new(0, 8)
-scrollLayout.SortOrder = Enum.SortOrder.LayoutOrder
-scrollLayout.Parent = scroll
+local _0x35 = Instance.new(_0xD("\85\73\76\105\115\116\76\97\121\111\117\116"))
+_0x35.Padding = UDim.new(0, 8)
+_0x35.SortOrder = Enum.SortOrder.LayoutOrder
+_0x35.Parent = _0x34
 
-local function createCard(titleText, subtitleText, color)
-    local card = Instance.new("Frame")
-    card.Size = UDim2.new(1, 0, 0, 70)
-    card.BackgroundColor3 = Color3.fromRGB(22, 22, 27)
-    card.BorderSizePixel = 0
-    card.Parent = scroll
-    local cCorner = Instance.new("UICorner") cCorner.CornerRadius = UDim.new(0, 10) cCorner.Parent = card
-    local cStroke = Instance.new("UIStroke") cStroke.Color = Color3.fromRGB(45, 45, 52) cStroke.Thickness = 1 cStroke.Parent = card
-    local bar = Instance.new("Frame")
-    bar.Size = UDim2.new(0, 4, 1, -12) bar.Position = UDim2.new(0, 6, 0, 6)
-    bar.BackgroundColor3 = color or Color3.fromRGB(180, 30, 30) bar.BorderSizePixel = 0 bar.Parent = card
-    local barCorner = Instance.new("UICorner") barCorner.CornerRadius = UDim.new(1, 0) barCorner.Parent = bar
-    local titleLbl = Instance.new("TextLabel")
-    titleLbl.Size = UDim2.new(1, -90, 0, 22) titleLbl.Position = UDim2.new(0, 18, 0, 10)
-    titleLbl.BackgroundTransparency = 1 titleLbl.Text = titleText
-    titleLbl.TextColor3 = Color3.fromRGB(255, 255, 255) titleLbl.TextSize = 14
-    titleLbl.Font = Enum.Font.GothamBold titleLbl.TextXAlignment = Enum.TextXAlignment.Left
-    titleLbl.Parent = card
-    local subLbl = Instance.new("TextLabel")
-    subLbl.Size = UDim2.new(1, -90, 0, 18) subLbl.Position = UDim2.new(0, 18, 0, 34)
-    subLbl.BackgroundTransparency = 1 subLbl.Text = subtitleText
-    subLbl.TextColor3 = Color3.fromRGB(140, 140, 150) subLbl.TextSize = 11
-    subLbl.Font = Enum.Font.Gotham subLbl.TextXAlignment = Enum.TextXAlignment.Left
-    subLbl.Parent = card
-    local toggleBg = Instance.new("Frame")
-    toggleBg.Size = UDim2.new(0, 44, 0, 24) toggleBg.Position = UDim2.new(1, -54, 0.5, -12)
-    toggleBg.BackgroundColor3 = Color3.fromRGB(50, 50, 58) toggleBg.BorderSizePixel = 0 toggleBg.Parent = card
-    local tCorner = Instance.new("UICorner") tCorner.CornerRadius = UDim.new(1, 0) tCorner.Parent = toggleBg
-    local toggleDot = Instance.new("Frame")
-    toggleDot.Size = UDim2.new(0, 18, 0, 18) toggleDot.Position = UDim2.new(0, 3, 0.5, -9)
-    toggleDot.BackgroundColor3 = Color3.fromRGB(180, 180, 180) toggleDot.BorderSizePixel = 0 toggleDot.Parent = toggleBg
-    local dCorner = Instance.new("UICorner") dCorner.CornerRadius = UDim.new(1, 0) dCorner.Parent = toggleDot
-    return card, toggleBg, toggleDot
+local function _0x36(_tT, _sT, _c)
+    local _cd = Instance.new(_0xD("\70\114\97\109\101"))
+    _cd.Size = UDim2.new(1, 0, 0, 70)
+    _cd.BackgroundColor3 = Color3.fromRGB(22, 22, 27)
+    _cd.BorderSizePixel = 0
+    _cd.Parent = _0x34
+    local _cc = Instance.new(_0xD("\85\73\67\111\114\110\101\114")) _cc.CornerRadius = UDim.new(0, 10) _cc.Parent = _cd
+    local _cs = Instance.new(_0xD("\85\73\83\116\114\111\107\101")) _cs.Color = Color3.fromRGB(45, 45, 52) _cs.Thickness = 1 _cs.Parent = _cd
+    local _b = Instance.new(_0xD("\70\114\97\109\101"))
+    _b.Size = UDim2.new(0, 4, 1, -12) _b.Position = UDim2.new(0, 6, 0, 6)
+    _b.BackgroundColor3 = _c or Color3.fromRGB(180, 30, 30) _b.BorderSizePixel = 0 _b.Parent = _cd
+    local _bc = Instance.new(_0xD("\85\73\67\111\114\110\101\114")) _bc.CornerRadius = UDim.new(1, 0) _bc.Parent = _b
+    local _tl = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+    _tl.Size = UDim2.new(1, -90, 0, 22) _tl.Position = UDim2.new(0, 18, 0, 10)
+    _tl.BackgroundTransparency = 1 _tl.Text = _tT
+    _tl.TextColor3 = Color3.fromRGB(255, 255, 255) _tl.TextSize = 14
+    _tl.Font = Enum.Font.GothamBold _tl.TextXAlignment = Enum.TextXAlignment.Left
+    _tl.Parent = _cd
+    local _sl = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+    _sl.Size = UDim2.new(1, -90, 0, 18) _sl.Position = UDim2.new(0, 18, 0, 34)
+    _sl.BackgroundTransparency = 1 _sl.Text = _sT
+    _sl.TextColor3 = Color3.fromRGB(140, 140, 150) _sl.TextSize = 11
+    _sl.Font = Enum.Font.Gotham _sl.TextXAlignment = Enum.TextXAlignment.Left
+    _sl.Parent = _cd
+    local _tb = Instance.new(_0xD("\70\114\97\109\101"))
+    _tb.Size = UDim2.new(0, 44, 0, 24) _tb.Position = UDim2.new(1, -54, 0.5, -12)
+    _tb.BackgroundColor3 = Color3.fromRGB(50, 50, 58) _tb.BorderSizePixel = 0 _tb.Parent = _cd
+    local _tc = Instance.new(_0xD("\85\73\67\111\114\110\101\114")) _tc.CornerRadius = UDim.new(1, 0) _tc.Parent = _tb
+    local _td = Instance.new(_0xD("\70\114\97\109\101"))
+    _td.Size = UDim2.new(0, 18, 0, 18) _td.Position = UDim2.new(0, 3, 0.5, -9)
+    _td.BackgroundColor3 = Color3.fromRGB(180, 180, 180) _td.BorderSizePixel = 0 _td.Parent = _tb
+    local _dc = Instance.new(_0xD("\85\73\67\111\114\110\101\114")) _dc.CornerRadius = UDim.new(1, 0) _dc.Parent = _td
+    return _cd, _tb, _td
 end
 
-local function makeToggle(card, toggleBg, toggleDot, callback)
-    local state = false
-    local function update(v)
-        if v then
-            TweenService:Create(toggleBg, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(180, 30, 30)}):Play()
-            TweenService:Create(toggleDot, TweenInfo.new(0.2), {Position = UDim2.new(1, -21, 0.5, -9), BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+local function _0x37(_cd, _tb, _td, _cb)
+    local _st = false
+    local function _upd(_v)
+        if _v then
+            _0x8:Create(_tb, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(180, 30, 30)}):Play()
+            _0x8:Create(_td, TweenInfo.new(0.2), {Position = UDim2.new(1, -21, 0.5, -9), BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
         else
-            TweenService:Create(toggleBg, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 58)}):Play()
-            TweenService:Create(toggleDot, TweenInfo.new(0.2), {Position = UDim2.new(0, 3, 0.5, -9), BackgroundColor3 = Color3.fromRGB(180, 180, 180)}):Play()
+            _0x8:Create(_tb, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 58)}):Play()
+            _0x8:Create(_td, TweenInfo.new(0.2), {Position = UDim2.new(0, 3, 0.5, -9), BackgroundColor3 = Color3.fromRGB(180, 180, 180)}):Play()
         end
     end
-    local click = Instance.new("TextButton")
-    click.Size = UDim2.new(1, 0, 1, 0) click.BackgroundTransparency = 1 click.Text = ""
-    click.Parent = card
-    click.MouseButton1Click:Connect(function()
-        state = not state update(state)
-        if callback then callback(state) end
+    local _ck = Instance.new(_0xD("\84\101\120\116\66\117\116\116\111\110"))
+    _ck.Size = UDim2.new(1, 0, 1, 0) _ck.BackgroundTransparency = 1 _ck.Text = ""
+    _ck.Parent = _cd
+    _ck.MouseButton1Click:Connect(function()
+        _st = not _st _upd(_st)
+        if _cb then _cb(_st) end
     end)
-    return update
+    return _upd
 end
 
-local aimbotEnabled = false
-local autoGunEnabled = false
-local rageShootEnabled = false
-local autoFarmCoinsEnabled = false
-local espEnabled = false
+local _0x38 = false
+local _0x39 = false
+local _0x3A = false
+local _0x3B = false
+local _0x3C = false
 
-local ROLE_COLORS = {
+local _0x3D = {
     Murderer = Color3.fromRGB(255, 0, 0),
     Sheriff  = Color3.fromRGB(0, 100, 255),
     Innocent = Color3.fromRGB(0, 255, 0)
 }
 
-local card1, tg1, dt1 = createCard("Aimbot Shiftlock", "Mira no Murderer com arma do Sheriff", Color3.fromRGB(255, 60, 60))
-makeToggle(card1, tg1, dt1, function(v) aimbotEnabled = v end)
+local _c1, _t1, _d1 = _0x36(_0xD("\65\105\109\98\111\116\32\83\104\105\102\116\108\111\99\107"), _0xD("\77\105\114\97\32\110\111\32\77\117\114\100\101\114\101\114\32\99\111\109\32\97\114\109\97\32\100\111\32\83\104\101\114\105\102\102"), Color3.fromRGB(255, 60, 60))
+_0x37(_c1, _t1, _d1, function(_v) _0x38 = _v end)
 
-local card2, tg2, dt2 = createCard("Auto Pegar Arma", "Pega a arma do Sheriff no chão", Color3.fromRGB(60, 150, 255))
-makeToggle(card2, tg2, dt2, function(v) autoGunEnabled = v end)
+local _c2, _t2, _d2 = _0x36(_0xD("\65\117\116\111\32\80\101\103\97\114\32\65\114\109\97"), _0xD("\80\101\103\97\32\97\32\97\114\109\97\32\100\111\32\83\104\101\114\105\102\102\32\110\111\32\99\104\195\163\111"), Color3.fromRGB(60, 150, 255))
+_0x37(_c2, _t2, _d2, function(_v) _0x39 = _v end)
 
-local card3, tg3, dt3 = createCard("Rage Shoot", "Atira através das paredes no Murderer", Color3.fromRGB(255, 150, 0))
-makeToggle(card3, tg3, dt3, function(v) rageShootEnabled = v end)
+local _c3, _t3, _d3 = _0x36(_0xD("\82\97\103\101\32\83\104\111\111\116"), _0xD("\65\116\105\114\97\32\97\116\114\97\118\195\169\115\32\100\97\115\32\112\97\114\101\100\101\115\32\110\111\32\77\117\114\100\101\114\101\114"), Color3.fromRGB(255, 150, 0))
+_0x37(_c3, _t3, _d3, function(_v) _0x3A = _v end)
 
-local card4, tg4, dt4 = createCard("Auto Farm Coins", "Teleporta em cima das moedas do mapa", Color3.fromRGB(255, 215, 0))
-makeToggle(card4, tg4, dt4, function(v) autoFarmCoinsEnabled = v end)
+local _c4, _t4, _d4 = _0x36(_0xD("\65\117\116\111\32\70\97\114\109\32\67\111\105\110\115"), _0xD("\84\101\108\101\112\111\114\116\97\32\101\109\32\99\105\109\97\32\100\97\115\32\109\111\101\100\97\115\32\100\111\32\109\97\112\97"), Color3.fromRGB(255, 215, 0))
+_0x37(_c4, _t4, _d4, function(_v) _0x3B = _v end)
 
-local card5, tg5, dt5 = createCard("ESP Roles", "Vermelho=Murderer | Azul=Sheriff | Verde=Innocent", Color3.fromRGB(0, 255, 100))
-makeToggle(card5, tg5, dt5, function(v) espEnabled = v end)
+local _c5, _t5, _d5 = _0x36(_0xD("\69\83\80\32\82\111\108\101\115"), _0xD("\86\101\114\109\101\108\104\111\61\77\117\114\100\101\114\101\114\32\124\32\65\122\117\108\61\83\104\101\114\105\102\102\32\124\32\86\101\114\100\101\61\73\110\110\111\99\101\110\116"), Color3.fromRGB(0, 255, 100))
+_0x37(_c5, _t5, _d5, function(_v) _0x3C = _v end)
 
 -- BOLHA FLUTUANTE
-local bubble = Instance.new("ImageButton")
-bubble.Size = UDim2.new(0, 55, 0, 55)
-bubble.Position = UDim2.new(0, 20, 0.5, -27)
-bubble.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
-bubble.BorderSizePixel = 0
-bubble.Image = "rbxassetid://" .. DECAL_ID
-bubble.Visible = false
-bubble.Active = true
-bubble.Draggable = true
-bubble.Parent = hubGui
+local _0x3E = Instance.new(_0xD("\73\109\97\103\101\66\117\116\116\111\110"))
+_0x3E.Size = UDim2.new(0, 55, 0, 55)
+_0x3E.Position = UDim2.new(0, 20, 0.5, -27)
+_0x3E.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+_0x3E.BorderSizePixel = 0
+_0x3E.Image = _0xD("\114\98\120\97\115\115\101\116\105\100\58\47\47") .. _0xE
+_0x3E.Visible = false
+_0x3E.Active = true
+_0x3E.Draggable = true
+_0x3E.Parent = _0x27
 
-local bubbleCorner = Instance.new("UICorner")
-bubbleCorner.CornerRadius = UDim.new(1, 0)
-bubbleCorner.Parent = bubble
+local _0x3F = Instance.new(_0xD("\85\73\67\111\114\110\101\114"))
+_0x3F.CornerRadius = UDim.new(1, 0)
+_0x3F.Parent = _0x3E
 
-local bubbleStroke = Instance.new("UIStroke")
-bubbleStroke.Color = Color3.fromRGB(255, 60, 60)
-bubbleStroke.Thickness = 2
-bubbleStroke.Parent = bubble
+local _0x40 = Instance.new(_0xD("\85\73\83\116\114\111\107\101"))
+_0x40.Color = Color3.fromRGB(255, 60, 60)
+_0x40.Thickness = 2
+_0x40.Parent = _0x3E
 
-local bubbleFallback = Instance.new("TextLabel")
-bubbleFallback.Size = UDim2.new(1, 0, 1, 0)
-bubbleFallback.BackgroundTransparency = 1
-bubbleFallback.Text = "A"
-bubbleFallback.TextColor3 = Color3.fromRGB(255, 255, 255)
-bubbleFallback.TextSize = 22
-bubbleFallback.Font = Enum.Font.GothamBold
-bubbleFallback.Visible = false
-bubbleFallback.Parent = bubble
+local _0x41 = Instance.new(_0xD("\84\101\120\116\76\97\98\101\108"))
+_0x41.Size = UDim2.new(1, 0, 1, 0)
+_0x41.BackgroundTransparency = 1
+_0x41.Text = "A"
+_0x41.TextColor3 = Color3.fromRGB(255, 255, 255)
+_0x41.TextSize = 22
+_0x41.Font = Enum.Font.GothamBold
+_0x41.Visible = false
+_0x41.Parent = _0x3E
 
 task.spawn(function()
     task.wait(1.5)
-    if not bubble.IsLoaded then
-        bubble.Image = "rbxassetid://" .. IMAGE_ID
+    if not _0x3E.IsLoaded then
+        _0x3E.Image = _0xD("\114\98\120\97\115\115\101\116\105\100\58\47\47") .. _0xF
         task.wait(1.5)
-        if not bubble.IsLoaded then
-            bubble.Image = ""
-            bubbleFallback.Visible = true
+        if not _0x3E.IsLoaded then
+            _0x3E.Image = ""
+            _0x41.Visible = true
         end
     end
 end)
 
-closeBtn.MouseButton1Click:Connect(function()
-    hubFrame.Visible = false
-    bubble.Visible = true
+_0x32.MouseButton1Click:Connect(function()
+    _0x28.Visible = false
+    _0x3E.Visible = true
 end)
 
-bubble.MouseButton1Click:Connect(function()
-    hubFrame.Visible = true
-    bubble.Visible = false
+_0x3E.MouseButton1Click:Connect(function()
+    _0x28.Visible = true
+    _0x3E.Visible = false
 end)
 
 -- ROLES
-local function getPlayerRole(player)
-    local char = player.Character
-    if not char then return "Innocent" end
-    local backpack = player:FindFirstChild("Backpack")
-    if backpack then
-        if backpack:FindFirstChild("Knife") or char:FindFirstChild("Knife") then return "Murderer" end
-        if backpack:FindFirstChild("Gun") or char:FindFirstChild("Gun") then return "Sheriff" end
+local function _0x42(_p)
+    local _ch = _p.Character
+    if not _ch then return _0xD("\73\110\110\111\99\101\110\116") end
+    local _bp = _p:FindFirstChild(_0xD("\66\97\99\107\112\97\99\107"))
+    if _bp then
+        if _bp:FindFirstChild(_0xD("\75\110\105\102\101")) or _ch:FindFirstChild(_0xD("\75\110\105\102\101")) then return _0xD("\77\117\114\100\101\114\101\114") end
+        if _bp:FindFirstChild(_0xD("\71\117\110")) or _ch:FindFirstChild(_0xD("\71\117\110")) then return _0xD("\83\104\101\114\105\102\102") end
     end
-    return "Innocent"
+    return _0xD("\73\110\110\111\99\101\110\116")
 end
-local function getLocalRole() return getPlayerRole(LocalPlayer) end
+local function _0x43() return _0x42(_0x4) end
 
 -- ESP
-local espDrawings = {}
-local function updateESPForPlayer(player, screenPos, role)
-    if not screenPos or screenPos.Z <= 0 then
-        if espDrawings[player] then
-            for _, obj in pairs(espDrawings[player]) do if obj then obj.Visible = false end end
+local _0x44 = {}
+local function _0x45(_p, _sp, _r)
+    if not _sp or _sp.Z <= 0 then
+        if _0x44[_p] then
+            for _, _o in pairs(_0x44[_p]) do if _o then _o.Visible = false end end
         end
         return
     end
-    local color = ROLE_COLORS[role] or ROLE_COLORS.Innocent
-    if not espDrawings[player] then
-        local box = Drawing.new("Square")
-        box.Visible = false box.Color = color box.Thickness = 1 box.Filled = false
-        local text = Drawing.new("Text")
-        text.Visible = false text.Color = color text.Size = 14 text.Center = true
-        text.Outline = true text.OutlineColor = Color3.fromRGB(0, 0, 0)
-        espDrawings[player] = {box = box, text = text, role = role}
+    local _col = _0x3D[_r] or _0x3D.Innocent
+    if not _0x44[_p] then
+        local _bx = Drawing.new(_0xD("\83\113\117\97\114\101"))
+        _bx.Visible = false _bx.Color = _col _bx.Thickness = 1 _bx.Filled = false
+        local _tx = Drawing.new(_0xD("\84\101\120\116"))
+        _tx.Visible = false _tx.Color = _col _tx.Size = 14 _tx.Center = true
+        _tx.Outline = true _tx.OutlineColor = Color3.fromRGB(0, 0, 0)
+        _0x44[_p] = {box = _bx, text = _tx, role = _r}
     end
-    local data = espDrawings[player]
-    if data.role ~= role then
-        data.role = role
-        data.box.Color = ROLE_COLORS[role] or ROLE_COLORS.Innocent
-        data.text.Color = data.box.Color
+    local _dt = _0x44[_p]
+    if _dt.role ~= _r then
+        _dt.role = _r
+        _dt.box.Color = _0x3D[_r] or _0x3D.Innocent
+        _dt.text.Color = _dt.box.Color
     end
-    local char = player.Character
-    if not char then return end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local head = char:FindFirstChild("Head")
-    if not hrp or not head then return end
-    local hrpScreen = Camera:WorldToViewportPoint(hrp.Position)
-    local headScreen = Camera:WorldToViewportPoint(head.Position)
-    if hrpScreen.Z <= 0 or headScreen.Z <= 0 then
-        data.box.Visible = false data.text.Visible = false return
+    local _ch = _p.Character
+    if not _ch then return end
+    local _hrp = _ch:FindFirstChild(_0xD("\72\117\109\97\110\111\105\100\82\111\111\116\80\97\114\116"))
+    local _hd = _ch:FindFirstChild(_0xD("\72\101\97\100"))
+    if not _hrp or not _hd then return end
+    local _hs = _0x9:WorldToViewportPoint(_hrp.Position)
+    local _hds = _0x9:WorldToViewportPoint(_hd.Position)
+    if _hs.Z <= 0 or _hds.Z <= 0 then
+        _dt.box.Visible = false _dt.text.Visible = false return
     end
-    local height = math.abs(headScreen.Y - hrpScreen.Y) * 1.8
-    local width = height * 0.6
-    local boxX = hrpScreen.X - width / 2
-    local boxY = headScreen.Y - (height * 0.2)
-    data.box.Size = Vector2.new(width, height)
-    data.box.Position = Vector2.new(boxX, boxY)
-    data.box.Visible = true
-    data.text.Text = role
-    data.text.Position = Vector2.new(hrpScreen.X, boxY - 18)
-    data.text.Visible = true
+    local _h = math.abs(_hds.Y - _hs.Y) * 1.8
+    local _w = _h * 0.6
+    local _bx = _hs.X - _w / 2
+    local _by = _hds.Y - (_h * 0.2)
+    _dt.box.Size = Vector2.new(_w, _h)
+    _dt.box.Position = Vector2.new(_bx, _by)
+    _dt.box.Visible = true
+    _dt.text.Text = _r
+    _dt.text.Position = Vector2.new(_hs.X, _by - 18)
+    _dt.text.Visible = true
 end
 
-local function cleanupESP(player)
-    if espDrawings[player] then
-        for _, obj in pairs(espDrawings[player]) do if obj and obj.Remove then obj:Remove() end end
-        espDrawings[player] = nil
+local function _0x46(_p)
+    if _0x44[_p] then
+        for _, _o in pairs(_0x44[_p]) do if _o and _o.Remove then _o:Remove() end end
+        _0x44[_p] = nil
     end
 end
 
-local function getMurdererTarget()
-    local bestTarget = nil local bestDistance = math.huge
-    for _, player in ipairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer and player.Character then
-            if getPlayerRole(player) == "Murderer" then
-                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-                local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-                if hrp and humanoid and humanoid.Health > 0 then
-                    local dist = (Camera.CFrame.Position - hrp.Position).Magnitude
-                    if dist < bestDistance then bestDistance = dist bestTarget = player end
+local function _0x47()
+    local _bt = nil local _bd = math.huge
+    for _, _p in ipairs(_0x3:GetPlayers()) do
+        if _p ~= _0x4 and _p.Character then
+            if _0x42(_p) == _0xD("\77\117\114\100\101\114\101\114") then
+                local _hrp = _p.Character:FindFirstChild(_0xD("\72\117\109\97\110\111\105\100\82\111\111\116\80\97\114\116"))
+                local _hm = _p.Character:FindFirstChildOfClass(_0xD("\72\117\109\97\110\111\105\100"))
+                if _hrp and _hm and _hm.Health > 0 then
+                    local _d = (_0x9.CFrame.Position - _hrp.Position).Magnitude
+                    if _d < _bd then _bd = _d _bt = _p end
                 end
             end
         end
     end
-    return bestTarget
+    return _bt
 end
 
 -- LOOP PRINCIPAL
-local renderConnection = RunService.RenderStepped:Connect(function()
-    local myChar = LocalPlayer.Character
-    if not myChar then return end
-    local myHumanoid = myChar:FindFirstChildOfClass("Humanoid")
-    if not myHumanoid or myHumanoid.Health <= 0 then return end
-    local myRole = getLocalRole()
+local _0x48 = _0x6.RenderStepped:Connect(function()
+    local _mc = _0x4.Character
+    if not _mc then return end
+    local _mh = _mc:FindFirstChildOfClass(_0xD("\72\117\109\97\110\111\105\100"))
+    if not _mh or _mh.Health <= 0 then return end
+    local _mr = _0x43()
 
-    if espEnabled then
-        for _, player in ipairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer and player.Character then
-                local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-                if humanoid and humanoid.Health > 0 then
-                    local role = getPlayerRole(player)
-                    local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-                    if hrp then
-                        local screenPos = Camera:WorldToViewportPoint(hrp.Position)
-                        updateESPForPlayer(player, screenPos, role)
+    if _0x3C then
+        for _, _p in ipairs(_0x3:GetPlayers()) do
+            if _p ~= _0x4 and _p.Character then
+                local _hm = _p.Character:FindFirstChildOfClass(_0xD("\72\117\109\97\110\111\105\100"))
+                if _hm and _hm.Health > 0 then
+                    local _r = _0x42(_p)
+                    local _hrp = _p.Character:FindFirstChild(_0xD("\72\117\109\97\110\111\105\100\82\111\111\116\80\97\114\116"))
+                    if _hrp then
+                        local _sp = _0x9:WorldToViewportPoint(_hrp.Position)
+                        _0x45(_p, _sp, _r)
                     end
                 else
-                    if espDrawings[player] then
-                        espDrawings[player].box.Visible = false
-                        espDrawings[player].text.Visible = false
+                    if _0x44[_p] then
+                        _0x44[_p].box.Visible = false
+                        _0x44[_p].text.Visible = false
                     end
                 end
             end
         end
     else
-        for _, data in pairs(espDrawings) do
-            data.box.Visible = false data.text.Visible = false
+        for _, _d in pairs(_0x44) do
+            _d.box.Visible = false _d.text.Visible = false
         end
     end
 
-    if aimbotEnabled and myRole == "Sheriff" then
-        local target = getMurdererTarget()
-        if target and target.Character then
-            local targetHrp = target.Character:FindFirstChild("HumanoidRootPart")
-            if targetHrp then
-                local lookAt = targetHrp.Position
-                local myPos = Camera.CFrame.Position
-                if (lookAt - myPos).Magnitude > 1 then
-                    Camera.CFrame = CFrame.lookAt(myPos, lookAt)
+    if _0x38 and _mr == _0xD("\83\104\101\114\105\102\102") then
+        local _tg = _0x47()
+        if _tg and _tg.Character then
+            local _th = _tg.Character:FindFirstChild(_0xD("\72\117\109\97\110\111\105\100\82\111\111\116\80\97\114\116"))
+            if _th then
+                local _la = _th.Position
+                local _mp = _0x9.CFrame.Position
+                if (_la - _mp).Magnitude > 1 then
+                    _0x9.CFrame = CFrame.lookAt(_mp, _la)
                 end
             end
         end
     end
 
-    if autoGunEnabled then
-        for _, obj in ipairs(workspace:GetChildren()) do
-            if obj.Name == "Gun" or obj.Name == "GunDrop" then
-                if obj:IsA("BasePart") then
-                    local myHrp = myChar:FindFirstChild("HumanoidRootPart")
-                    if myHrp then
-                        local dist = (myHrp.Position - obj.Position).Magnitude
-                        if dist < 50 then myHrp.CFrame = CFrame.new(obj.Position + Vector3.new(0, 2, 0)) end
+    if _0x39 then
+        for _, _o in ipairs(workspace:GetChildren()) do
+            if _o.Name == _0xD("\71\117\110") or _o.Name == _0xD("\71\117\110\68\114\111\112") then
+                if _o:IsA(_0xD("\66\97\115\101\80\97\114\116")) then
+                    local _mhrp = _mc:FindFirstChild(_0xD("\72\117\109\97\110\111\105\100\82\111\111\116\80\97\114\116"))
+                    if _mhrp then
+                        local _d = (_mhrp.Position - _o.Position).Magnitude
+                        if _d < 50 then _mhrp.CFrame = CFrame.new(_o.Position + Vector3.new(0, 2, 0)) end
                     end
                 end
             end
         end
     end
 
-    if rageShootEnabled and myRole == "Sheriff" then
-        local target = getMurdererTarget()
-        if target and target.Character then
-            local targetHrp = target.Character:FindFirstChild("HumanoidRootPart")
-            local tool = myChar:FindFirstChildOfClass("Tool")
-            if tool and targetHrp then
-                local myHrp = myChar:FindFirstChild("HumanoidRootPart")
-                if myHrp then myHrp.CFrame = CFrame.lookAt(myHrp.Position, targetHrp.Position) end
-                tool:Activate()
+    if _0x3A and _mr == _0xD("\83\104\101\114\105\102\102") then
+        local _tg = _0x47()
+        if _tg and _tg.Character then
+            local _th = _tg.Character:FindFirstChild(_0xD("\72\117\109\97\110\111\105\100\82\111\111\116\80\97\114\116"))
+            local _tl = _mc:FindFirstChildOfClass(_0xD("\84\111\111\108"))
+            if _tl and _th then
+                local _mhrp = _mc:FindFirstChild(_0xD("\72\117\109\97\110\111\105\100\82\111\111\116\80\97\114\116"))
+                if _mhrp then _mhrp.CFrame = CFrame.lookAt(_mhrp.Position, _th.Position) end
+                _tl:Activate()
             end
         end
     end
 
-    if autoFarmCoinsEnabled then
-        local myHrp = myChar:FindFirstChild("HumanoidRootPart")
-        if myHrp then
-            for _, obj in ipairs(workspace:GetDescendants()) do
-                if obj:IsA("BasePart") and (obj.Name:lower():find("coin") or obj.Name == "Coin" or obj.Name:lower():find("moeda")) then
-                    local dist = (myHrp.Position - obj.Position).Magnitude
-                    if dist < 100 then
-                        myHrp.CFrame = CFrame.new(obj.Position + Vector3.new(0, 3, 0))
+    if _0x3B then
+        local _mhrp = _mc:FindFirstChild(_0xD("\72\117\109\97\110\111\105\100\82\111\111\116\80\97\114\116"))
+        if _mhrp then
+            for _, _o in ipairs(workspace:GetDescendants()) do
+                if _o:IsA(_0xD("\66\97\115\101\80\97\114\116")) and (_o.Name:lower():find(_0xD("\99\111\105\110")) or _o.Name == _0xD("\67\111\105\110") or _o.Name:lower():find(_0xD("\109\111\101\100\97"))) then
+                    local _d = (_mhrp.Position - _o.Position).Magnitude
+                    if _d < 100 then
+                        _mhrp.CFrame = CFrame.new(_o.Position + Vector3.new(0, 3, 0))
                         break
                     end
                 end
@@ -736,9 +715,9 @@ local renderConnection = RunService.RenderStepped:Connect(function()
     end
 end)
 
-Players.PlayerRemoving:Connect(function(player) cleanupESP(player) end)
-LocalPlayer.CharacterRemoving:Connect(function()
-    for player, _ in pairs(espDrawings) do cleanupESP(player) end
+_0x3.PlayerRemoving:Connect(function(_p) _0x46(_p) end)
+_0x4.CharacterRemoving:Connect(function()
+    for _p, _ in pairs(_0x44) do _0x46(_p) end
 end)
 
-getgenv().AssasinHubConnection = renderConnection
+getgenv().AssasinHubConnection = _0x48
